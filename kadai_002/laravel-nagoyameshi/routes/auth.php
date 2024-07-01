@@ -9,7 +9,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\Administrator;                                                        //管理者認証機能作成の為、追加（名人）
+use App\Http\Controllers\Admin\HomeController;                                                        //管理者認証機能作成の為、追加（名人）
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest', 'guest:admin'])->group(function () {                      //管理者認証機能作成の為、変更（名人）
@@ -37,10 +37,10 @@ Route::middleware(['guest', 'guest:admin'])->group(function () {                
 });
     //管理者認証機能作成の為、追加（名人）
 Route::middleware('guest:admin')->group(function () {
-    Route::get('admin/login', [Admin\Auth\AuthenticatedSessionController::class, 'create'])
+    Route::get('admin/login', [AuthenticatedSessionController::class, 'create'])             //カリキュラム内容確認後、変更
                 ->name('admin.login');
 
-    Route::post('admin/login', [Admin\Auth\AuthenticatedSessionController::class, 'store']);
+    Route::post('admin/login', [AuthenticatedSessionController::class, 'store']);
 });
 
 Route::middleware('auth')->group(function () {
@@ -67,6 +67,6 @@ Route::middleware('auth')->group(function () {
 });
     //管理者認証機能作成の為、追加（名人）
 Route::middleware('auth:admin')->group(function () {
-    Route::post('admin/logout', [Admin\Auth\AuthenticatedSessionController::class, 'destroy'])
+    Route::post('admin/logout', [AuthenticatedSessionController::class, 'destroy'])         //カリキュラム内容確認後、変更
                 ->name('admin.logout');
 });

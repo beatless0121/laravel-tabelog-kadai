@@ -20,6 +20,7 @@ class RedirectIfAuthenticated
         $guards = empty($guards) ? [null] : $guards;
         
         foreach ($guards as $guard) {
+            \Debugbar::addMessage($guard);          //変数調査
             if (Auth::guard($guard)->check()) {
                 //管理者認証機能作成の為、追加（名人）
                 if ($guard === 'admin') {

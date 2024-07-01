@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Administrator;                                 //管理者認証機能作成の為、変更（名人）
+use App\Http\Controllers\Admin\HomeController;                              //管理者認証機能作成の為、変更（名人）
 
 /*
 |--------------------------------------------------------------------------

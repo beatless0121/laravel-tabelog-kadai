@@ -15,7 +15,7 @@ return [
 
     'defaults' => [
         'guard' => 'web',
-        'passwords' => 'users',                                               //usersテーブルからmembersテーブルへの変更のため、変更
+        'passwords' => 'users',                                              
     ],
 
     /*
@@ -42,9 +42,9 @@ return [
         ],
 
       // administrators用の認証を追加（テスト時エラー発生の為）
-      'administrators' => [
+      'admin' => [                                                              //エラーの為、'administrators'から変更
         'driver' => 'session',
-        'provider' => 'administrators',
+        'provider' => 'admin',
       ],
     ],
 
@@ -71,7 +71,7 @@ return [
             'model' => App\Models\Member::class,                                    //usersテーブルからmembersテーブルへの変更のため、変更
         ],
 
-        'administrators' => [
+        'admin' => [                                                               //エラーの為、'administrators'から変更
             'driver' => 'eloquent',
             'model' => App\Models\Administrator::class,
         ],
@@ -109,8 +109,8 @@ return [
             'throttle' => 60,
         ],
 
-        'administrators' => [
-            'provider' => 'administrators',
+        'admin' => [                                                                   //エラーの為、'administrators'から変更
+            'provider' => 'admin',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
