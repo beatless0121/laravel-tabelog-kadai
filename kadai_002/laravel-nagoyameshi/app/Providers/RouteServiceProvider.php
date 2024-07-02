@@ -18,7 +18,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     public const HOME = '/dashboard';
-    public const ADMIN_HOME = 'admin/home';                        //管理者認証機能作成の為、追加（名人）
+    public const ADMIN_HOME = 'admin/home';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.

@@ -41,9 +41,9 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $this->is('admin/*') ? $guard = 'admin' : $guard = 'web';                          //管理者認証機能作成の為、追加（名人）
+        $this->is('admin/*') ? $guard = 'admin' : $guard = 'web';
 
-        if (! Auth::guard($guard)->attempt($this->only('email', 'password'), $this->boolean('remember'))) {       //管理者認証機能作成の為、追加（名人）
+        if (! Auth::guard($guard)->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

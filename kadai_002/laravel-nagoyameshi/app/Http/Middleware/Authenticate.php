@@ -12,11 +12,10 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        //管理者認証機能追加の為、追加（名人）
         if ($request->is('admin/*')) {
             return route('admin.login');
         }
-        
+       
         return $request->expectsJson() ? null : route('login');
     }
 }

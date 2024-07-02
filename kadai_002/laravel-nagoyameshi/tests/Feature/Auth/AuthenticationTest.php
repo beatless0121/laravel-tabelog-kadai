@@ -2,8 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\Member;
-use App\Models\Administrator;
+use App\Models\Member;                                                                        //usersテーブルからmembersテーブルへ変更の為、変更
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -12,7 +11,6 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    // ログイン画面が描画できるかテスト
     public function test_login_screen_can_be_rendered(): void
     {
         $response = $this->get('/login');
@@ -20,13 +18,12 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    // 会員でログインしてhome画面にリダイレクトされるかテスト
-    public function test_members_can_authenticate_using_the_login_screen(): void
+    public function test_users_can_authenticate_using_the_login_screen(): void
     {
-        $member = Member::factory()->create();
+        $member = Member::factory()->create();                                               //usersテーブルからmembersテーブルへ変更の為、変更（テスト時）
 
-        $response = $this->post('/login', [
-            'email' => $member->email,
+        $response = $this->post('/login', [                                                  //usersテーブルからmembersテーブルへ変更の為、変更（テスト時）
+            'email' => $member->email,                                                       //usersテーブルからmembersテーブルへ変更の為、変更（テスト時）
             'password' => 'password',
         ]);
 
@@ -34,65 +31,25 @@ class AuthenticationTest extends TestCase
         $response->assertRedirect(RouteServiceProvider::HOME);
     }
 
-    // 会員でログインしようとしてパスワード間違いで認証されないままかテスト
-    public function test_members_can_not_authenticate_with_invalid_password(): void
+    public function test_users_can_not_authenticate_with_invalid_password(): void
     {
-        $member = Member::factory()->create();
+        $member = Member::factory()->create();                                              //usersテーブルからmembersテーブルへ変更の為、変更 （テスト時）                                     
 
         $this->post('/login', [
-            'email' => $member->email,
+            'email' => $member->email,                                                     //usersテーブルからmembersテーブルへ変更の為、変更 （テスト時）
             'password' => 'wrong-password',
         ]);
 
         $this->assertGuest();
     }
 
-    // 会員でログイン状態の場合は、ログアウトできるかテスト
-    public function test_members_can_logout(): void
+    public function test_users_can_logout(): void
     {
-        $member = Member::factory()->create();
+        $member = Member::factory()->create();                                            //usersテーブルからmembersテーブルへ変更の為、変更（テスト時）
 
-        $response = $this->actingAs($member)->post('/logout');
+        $response = $this->actingAs($member)->post('/logout');                            //usersテーブルからmembersテーブルへ変更の為、変更（テスト時）
 
         $this->assertGuest();
         $response->assertRedirect('/');
-    }
-
-    // 管理者でログインしてhome画面にリダイレクトされるかテスト
-    public function test_administrators_can_authenticate_using_the_login_screen(): void
-    {
-        $administrator = Administrator::factory()->create();
-
-        $response = $this->post('/login', [
-            'email' => $administrator->email,
-            'password' => 'password',
-        ]);
-
-        $this->assertAuthenticated();
-        $response->assertRedirect(RouteServiceProvider::HOME);
-    }
-
-    // 管理者でログインしようとしてパスワード間違いで認証されないままかテスト
-    public function test_administrators_not_authenticate_with_invalid_password(): void
-    {
-        $administrator = Administrator::factory()->create();
-
-        $this->post('/login', [
-            'email' => $administrator->email,
-            'password' => 'wrong-password',
-        ]);
-
-        $this->assertGuest();
-    }
-
-    // 管理者でログイン状態の場合は、ログアウトできるかテスト
-    public function test_administrators_can_logout(): void
-    {
-        $administrator = Administrator::factory()->create();
-
-        $response = $this->actingAs($administrator)->post('/logout');
-
-        $this->assertGuest();
-        $response->assertRedirect('/');                                           
     }
 }

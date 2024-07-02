@@ -18,7 +18,7 @@ class Administrator extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'name',                                                               //nameカラムがあるため追加
         'email',
         'password',
     ];

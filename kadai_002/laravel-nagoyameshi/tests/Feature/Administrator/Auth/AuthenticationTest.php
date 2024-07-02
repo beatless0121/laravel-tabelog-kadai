@@ -26,7 +26,7 @@ class AuthenticationTest extends TestCase
         $admin = new Administrator();
         $admin->email = 'admin@example.com';
         $admin->password = Hash::make('nagoyameshi');
-        $admin->name = 'nagoyameshi';                                                                        //テストコマンド実行時エラー出たため、追加
+        $admin->name = 'nagoyameshi'; 
         $admin->save();
 
         $response = $this->post('/admin/login', [
@@ -43,7 +43,7 @@ class AuthenticationTest extends TestCase
         $admin = new Administrator();
         $admin->email = 'admin@example.com';
         $admin->password = Hash::make('nagoyameshi');
-        $admin->name = 'nagoyameshi';                                                                          //テストコマンド実行時エラー出たため、追加
+        $admin->name = 'nagoyameshi'; 
         $admin->save();
 
         $this->post('/admin/login', [
@@ -59,7 +59,7 @@ class AuthenticationTest extends TestCase
         $admin = new Administrator();
         $admin->email = 'admin@example.com';
         $admin->password = Hash::make('nagoyameshi');
-        $admin->name = 'nagoyameshi';                                                                       //テストコマンド実行時エラー出たため、追加
+        $admin->name = 'nagoyameshi'; 
         $admin->save();
 
         $response = $this->actingAs($admin, 'admin')->post('/admin/logout');

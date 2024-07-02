@@ -9,10 +9,10 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\Admin\HomeController;                                                        //管理者認証機能作成の為、追加（名人）
+use App\Http\Controllers\Administrator\HomeController;                                      //Administratorsテーブル追加
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['guest', 'guest:admin'])->group(function () {                      //管理者認証機能作成の為、変更（名人）
+Route::middleware(['guest', 'guest:admin'])->group(function () {            //Administratorsテーブル追加
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
@@ -33,14 +33,14 @@ Route::middleware(['guest', 'guest:admin'])->group(function () {                
                 ->name('password.reset');
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
-                ->name('password.store');   
+                ->name('password.store');
 });
-    //管理者認証機能作成の為、追加（名人）
-Route::middleware('guest:admin')->group(function () {
-    Route::get('admin/login', [AuthenticatedSessionController::class, 'create'])             //カリキュラム内容確認後、変更
+
+    Route::middleware('guest:admin')->group(function () {                                     //Administratorsテーブル追加
+    Route::get('admin/login', [Administrator\Auth\AuthenticatedSessionController::class, 'create'])
                 ->name('admin.login');
 
-    Route::post('admin/login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('admin/login', [Administrator\Auth\AuthenticatedSessionController::class, 'store']);
 });
 
 Route::middleware('auth')->group(function () {
@@ -65,8 +65,8 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 });
-    //管理者認証機能作成の為、追加（名人）
-Route::middleware('auth:admin')->group(function () {
-    Route::post('admin/logout', [AuthenticatedSessionController::class, 'destroy'])         //カリキュラム内容確認後、変更
+
+    Route::middleware('auth:admin')->group(function () {                                               //Administratorsテーブル追加
+    Route::post('admin/logout', [Administrator\Auth\AuthenticatedSessionController::class, 'destroy'])
                 ->name('admin.logout');
 });
