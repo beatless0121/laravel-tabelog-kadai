@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Administrator\HomeController;                        //Administratorsテーブル追加
+use App\Http\Controllers\Administrator;                    //Administratorsテーブル追加（Administratorでクラスパスを定義しているため）
 
 /*
 |--------------------------------------------------------------------------

@@ -70,7 +70,7 @@ return [
             'model' => App\Models\Member::class,                                    //usersテーブルからmembersテーブルへの変更のため、変更
         ],
 
-        'admins' => [
+        'admin' => [
             'driver' => 'eloquent',
             'model' => App\Models\Administrator::class,
         ],

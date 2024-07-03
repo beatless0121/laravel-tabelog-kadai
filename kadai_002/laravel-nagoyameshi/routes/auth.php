@@ -9,7 +9,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\Administrator\HomeController;                                      //Administratorsテーブル追加
+use App\Http\Controllers\Administrator;                                      //Administratorsテーブル追加（Administratorでクラスパスを定義しているため）
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest', 'guest:admin'])->group(function () {            //Administratorsテーブル追加
@@ -36,8 +36,9 @@ Route::middleware(['guest', 'guest:admin'])->group(function () {            //Ad
                 ->name('password.store');
 });
 
-    Route::middleware('guest:admin')->group(function () {                                     //Administratorsテーブル追加
-    Route::get('admin/login', [Administrator\Auth\AuthenticatedSessionController::class, 'create'])
+    Route::middleware('guest:admin')->group(function () {                                                      //Administratorsテーブル追加
+    Route::get('admin/login', [Administrator\Auth\AuthenticatedSessionController::class
+    , 'create'])
                 ->name('admin.login');
 
     Route::post('admin/login', [Administrator\Auth\AuthenticatedSessionController::class, 'store']);

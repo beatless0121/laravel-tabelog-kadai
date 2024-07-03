@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Administrator\Auth;               //Administratorsテーブル追加（管理者コントローラの為）
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
