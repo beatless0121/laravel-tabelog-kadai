@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Administrator;                    //Administratorsテーブル追加（Administratorでクラスパスを定義しているため）
+use App\Http\Controllers\Administrator;                                     //管理者認証機能（管理者側）追加の為（Administratorでクラスパスを定義しているため）
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,15 @@ Route::get('/', function () {
 
 require __DIR__.'/auth.php';
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {           //Administratorsテーブル追加
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {          //管理者認証機能（管理者側）追加の為
     Route::get('home', [Administrator\HomeController::class, 'index'])->name('home');
+
+    Route::middleware('can:admin')->group(function () {
+        Route::get('members', [Administrator\MemberController::class, 'index'])->name('members.index');                   //会員管理機能（管理者側）追加の為      
+        Route::get('members/{member}', [Administrator\MemberController::class, 'show'])->name('members.show');
+    });
 });
+
+
+
+

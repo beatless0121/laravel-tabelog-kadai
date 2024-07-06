@@ -65,4 +65,9 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
+
+    //会員管理機能テストの為、追加
+    protected $routeMiddleware = [
+        'admin' => \App\Http\Middleware\AdministratoMiddleware::class,
+    ];
 }
