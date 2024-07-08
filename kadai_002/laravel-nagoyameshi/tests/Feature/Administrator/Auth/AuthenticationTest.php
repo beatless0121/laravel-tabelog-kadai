@@ -26,7 +26,7 @@ class AuthenticationTest extends TestCase
         $admin = new Administrator();
         $admin->email = 'admin@example.com';
         $admin->password = Hash::make('nagoyameshi');
-        $admin->name = 'nagoyameshi'; 
+        $admin->name = 'nagoyameshi';                                                              
         $admin->save();
 
         $response = $this->post('/admin/login', [

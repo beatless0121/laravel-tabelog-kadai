@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="col container">
+  <div class="col container">
         <div class="row justify-content-center">
             <div class="col-xxl-9 col-xl-10 col-lg-11">
                 <h1 class="mb-4 text-center">会員一覧</h1>
@@ -44,9 +44,9 @@
                 </table>
 
                 <div class="d-flex justify-content-center">
-                    {{ $users->appends(request()->query())->links() }}
+                    {{ $members->appends(request()->query())->links() }}
                 </div>
             </div>
         </div>
     </div>
-@endsection
+@endsection  

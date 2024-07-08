@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Auth\MustVerifyEmail;                                    //メール認証機能追加（要件定義書必須項目）
 
+
 class Member extends Authenticatable implements MustVerifyEmail                  //メール認証機能追加（要件定義書必須項目）
 {
     use HasApiTokens, HasFactory, Notifiable;

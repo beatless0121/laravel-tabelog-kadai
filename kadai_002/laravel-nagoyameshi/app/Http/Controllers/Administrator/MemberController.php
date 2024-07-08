@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Administrator;
 
+
 class MemberController extends Controller
 {
     public function index(Request $request)                            //一覧ページ
@@ -21,7 +22,7 @@ class MemberController extends Controller
             $total = $members->total();
         } else {
             $members = Member::paginate(15);                             //ページネーション（15件ずつ表示）
-            $total = "";
+            $total = 0;
             $keyword = null;
         }
 

@@ -23,12 +23,9 @@ require __DIR__.'/auth.php';
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {          //管理者認証機能（管理者側）追加の為
     Route::get('home', [Administrator\HomeController::class, 'index'])->name('home');
-    Route::middleware('can:admin')->group(function () {
-      Route::get('members', [Administrator\MemberController::class, 'index'])->name('members.index');                   //会員管理機能（管理者側）追加の為      
-      Route::get('members/{member}', [Administrator\MemberController::class, 'show'])->name('members.show');  
-    });
-
-  });
+    Route::get('members', [Administrator\MemberController::class, 'index'])->name('members.index');                   //会員管理機能（管理者側）追加の為      
+    Route::get('members/{member}', [Administrator\MemberController::class, 'show'])->name('members.show');  
+ });
 
 
 
