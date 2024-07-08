@@ -11,7 +11,10 @@ use Illuminate\Support\Str;
  */
 class MemberFactory extends Factory                                              //usersテーブルからmembersテーブルへ変更の為、名称（UserFactory.php）とともに変更（テスト時）
 {
-    protected $model = Member::class;                                           //テスト時エラー発生の為、追加
+    /**
+     * The current password being used by the factory.
+     */
+    protected static ?string $password;                                         //テスト時passswordエラー発生の為
 
     public function definition(): array
     {
@@ -28,12 +31,13 @@ class MemberFactory extends Factory                                             
         ];
     }
 
-    public function admin()
+   /**
+     * Indicate that the model's email address should be unverified.
+     */
+    public function unverified(): static
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'is_admin' => true, // 管理者ユーザーとして生成
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'email_verified_at' => null,
+        ]);
     }
 }

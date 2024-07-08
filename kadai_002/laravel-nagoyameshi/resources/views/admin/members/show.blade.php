@@ -6,12 +6,12 @@
             <div class="col-xl-7 col-lg-8 col-md-9">
                 <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">会員一覧</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.members.index') }}">会員一覧</a></li>
                         <li class="breadcrumb-item active" aria-current="page">会員詳細</li>
                     </ol>
                 </nav>
 
-                <h1 class="mb-4 text-center">{{ $user->name }}</h1>
+                <h1 class="mb-4 text-center">{{ $member->name }}</h1>
 
                 <div class="container mb-4">
                     <div class="row pb-2 mb-2 border-bottom">
@@ -20,7 +20,7 @@
                         </div>
 
                         <div class="col">
-                            <span>{{ $user->id }}</span>
+                            <span>{{ $member->id }}</span>
                         </div>
                     </div>
 
@@ -30,7 +30,7 @@
                         </div>
 
                         <div class="col">
-                            <span>{{ $user->name }}</span>
+                            <span>{{ $member->name }}</span>
                         </div>
                     </div>
 
@@ -40,7 +40,7 @@
                         </div>
 
                         <div class="col">
-                            <span>{{ $user->kana }}</span>
+                            <span>{{ $member->kana }}</span>
                         </div>
                     </div>
 
@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="col">
-                            <span>{{ $user->email }}</span>
+                            <span>{{ $member->email }}</span>
                         </div>
                     </div>
 
@@ -60,7 +60,7 @@
                         </div>
 
                         <div class="col">
-                            <span>{{ substr($user->postal_code, 0, 3) . '-' . substr($user->postal_code, 3) }}</span>
+                            <span>{{ substr($member->postal_code, 0, 3) . '-' . substr($member->postal_code, 3) }}</span>
                         </div>
                     </div>
 
@@ -70,7 +70,7 @@
                         </div>
 
                         <div class="col">
-                            <span>{{ $user->address }}</span>
+                            <span>{{ $member->address }}</span>
                         </div>
                     </div>
 
@@ -80,7 +80,7 @@
                         </div>
 
                         <div class="col">
-                            <span>{{ $user->phone_number }}</span>
+                            <span>{{ $member->phone_number }}</span>
                         </div>
                     </div>
 
@@ -91,8 +91,8 @@
 
                         <div class="col">
                             <span>
-                                @if ($user->birthday !== null)
-                                    {{ date('n月j日', strtotime($user->birthday)) }}
+                                @if ($member->birthday !== null)
+                                    {{ date('n月j日', strtotime($member->birthday)) }}
                                 @else
                                     未設定
                                 @endif
@@ -107,8 +107,8 @@
 
                         <div class="col">
                             <span>
-                                @if ($user->occupation !== null)
-                                    {{ $user->occupation }}
+                                @if ($member->occupation !== null)
+                                    {{ $member->occupation }}
                                 @else
                                     未設定
                                 @endif

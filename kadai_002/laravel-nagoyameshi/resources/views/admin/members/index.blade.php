@@ -7,7 +7,7 @@
                 <h1 class="mb-4 text-center">会員一覧</h1>
 
                 <div class="d-flex justify-content-between align-items-end">
-                    <form method="GET" action="{{ route('admin.users.index') }}" class="nagoyameshi-admin-search-box mb-3">
+                    <form method="GET" action="{{ route('admin.members.index') }}" class="nagoyameshi-admin-search-box mb-3">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="氏名・フリガナで検索" name="keyword" value="{{ $keyword }}">
                             <button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button>
@@ -20,7 +20,7 @@
                 </div>
 
 
-                <table class="table table-hover nagoyameshi-users-table">
+                <table class="table table-hover nagoyameshi-members-table">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
@@ -31,13 +31,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($users as $user)
+                        @foreach($members as $member)
                             <tr>
-                                <td>{{ $user->id }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->kana }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td><a href="{{ route('admin.users.show', $user) }}">詳細</a></td>
+                                <td>{{ $member->id }}</td>
+                                <td>{{ $member->name }}</td>
+                                <td>{{ $member->kana }}</td>
+                                <td>{{ $member->email }}</td>
+                                <td><a href="{{ route('admin.members.show', $member) }}">詳細</a></td>
                             </tr>
                         @endforeach
                     </tbody>
