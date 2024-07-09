@@ -28,7 +28,7 @@
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('admin.home') }}">ホーム</a>
                             <a class="dropdown-item" href="{{ route('admin.members.index') }}">会員一覧</a>
-                            <a class="dropdown-item" href="#">店舗一覧</a>
+                            <a class="dropdown-item" href="{{ route('admin.shops.index') }}">店舗一覧</a>
                             <a class="dropdown-item" href="#">カテゴリ一覧</a>
                             <a class="dropdown-item" href="#">会社概要</a>
                             <a class="dropdown-item" href="#">利用規約</a>
@@ -60,7 +60,7 @@
                     @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::member()->name }}
+                                {{ Auth::user()->name }}
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

@@ -55,7 +55,7 @@ class MemberTest extends TestCase
          ]);
  
          // 会員一覧ページにアクセス
-         $response = $this->get('/admin/members');
+         $response = $this->actingAs($admin, 'admin')->get(route('admin.members.index'));           //テスト時エラーが出た為細かく表示
          $response->assertStatus(200);
      }
 
@@ -109,7 +109,7 @@ class MemberTest extends TestCase
        ]);
 
        // 会員詳細ページにアクセス
-       $response = $this->get('/admin/members/' . $member->id);
+       $response = $this->actingAs($admin, 'admin')->get(route('admin.members.show', $member));       //テスト時エラーが出た為細かく表示
        $response->assertStatus(200);
    }
 }

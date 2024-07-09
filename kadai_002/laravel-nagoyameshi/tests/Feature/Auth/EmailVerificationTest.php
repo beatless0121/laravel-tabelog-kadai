@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\member;
+use App\Models\Member;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,7 +17,7 @@ class EmailVerificationTest extends TestCase
     public function test_email_verification_screen_can_be_rendered(): void
     {
         $this->withoutExceptionHandling();                           //テスト時エラー発生の為追加
-        $member = member::factory()->create([
+        $member = Member::factory()->create([
             'email_verified_at' => null,
         ]);
 
@@ -28,7 +28,7 @@ class EmailVerificationTest extends TestCase
 
     public function test_email_can_be_verified(): void
     {
-        $member = member::factory()->create([
+        $member = Member::factory()->create([
             'email_verified_at' => null,
         ]);
 
@@ -49,7 +49,7 @@ class EmailVerificationTest extends TestCase
 
     public function test_email_is_not_verified_with_invalid_hash(): void
     {
-        $member = member::factory()->create([
+        $member = Member::factory()->create([
             'email_verified_at' => null,
         ]);
 

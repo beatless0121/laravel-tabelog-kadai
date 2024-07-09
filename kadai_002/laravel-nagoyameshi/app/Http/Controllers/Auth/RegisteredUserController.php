@@ -58,6 +58,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($member);                                                                              //usersテーブルからmembersテーブルへの変更のため、変更
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect('/verify-email');
     }
 }
