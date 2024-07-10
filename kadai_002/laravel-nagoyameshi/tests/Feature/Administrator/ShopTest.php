@@ -13,7 +13,7 @@ use App\Models\Administrator;
 
 class ShopTest extends TestCase
 {
-    use RefreshDatabase;                                                  //記述しないと「SQLのデータベースで管理者のメールアドレスがユニークキーになっていて、重複しているデータをinsertできない。」というエラー発生
+    use RefreshDatabase;                                                  //データベースをリセットしてくれるトレイト
     // indexアクション（店舗一覧ページ）
     /**
      * 未ログインのユーザーは管理者側の店舗一覧ページにアクセスできない
@@ -32,14 +32,8 @@ class ShopTest extends TestCase
         // 会員データ作成
         $member = Member::factory()->create();
 
-        // ログイン
-        $response = $this->post('/login', [
-            'email' => $member->email,
-            'password' => 'password',
-        ]);
-
         // 店舗一覧ページにアクセス
-        $response = $this->get(route('admin.shops.index'));
+        $response = $this->actingAs($member, 'web')->get(route('admin.shops.index'));
 
         // 管理者でログインしていないため、管理者ログインページにリダイレクトされる
         $response->assertStatus(302);
@@ -51,15 +45,12 @@ class ShopTest extends TestCase
      */
     public function test_admin_can_access_admin_shop_index()
     {
-        $admin = new Administrator(); 
-        $admin->email = 'admin@example.com';
-        $admin->password = Hash::make('nagoyameshi');
-        $admin->name = 'nagoyameshi';   
-        $admin->save();
+       // 管理者データ作成
+       $admin = Administrator::factory()->create();
 
-        $response = $this->actingAs($admin, 'admin')->get(route('admin.shops.index'));
-
-        $response->assertStatus(200);
+        // 店舗一覧ページにアクセス
+       $response = $this->actingAs($admin, 'admin')->get(route('admin.shops.index'));
+       $response->assertStatus(200);
     }
 
     // showアクション（店舗詳細ページ）
@@ -68,8 +59,11 @@ class ShopTest extends TestCase
      */
     public function test_guest_cannot_access_admin_shop_show()
     {
-        $response = $this->get(route('admin.shops.show'));
-        $response->assertRedirect(route('admin.login'));
+      // 店舗データ作成
+      $shop = Shop::factory()->create();
+
+      $response = $this->get('/admin/shops/' . $shop->id);
+      $response->assertRedirect(route('admin.login'));
     }
 
     /**
@@ -77,21 +71,18 @@ class ShopTest extends TestCase
      */
     public function test_member_cannot_access_admin_shop_show()
     {
-        // 会員データ作成
-        $member = Member::factory()->create();
+       // 会員データ作成
+       $member = Member::factory()->create();
 
-        // ログイン
-        $response = $this->post('/login', [
-          'email' => $member->email,
-          'password' => 'password',
-        ]);
+       // 店舗データ作成
+       $shop = Shop::factory()->create();
 
-        // 会員詳細ページにアクセス
-        $response = $this->actingAs($admin, 'admin')->get(route('admin.shops.show'));
+       // 店舗詳細ページにアクセス
+       $response = $this->actingAs($member, 'web')->get('/admin/shops/' . $shop->id);
 
-        // 管理者でログインしていないため、管理者ログインページにリダイレクトされる;
-        $response->assertStatus(302);
-        $response->assertRedirect('admin/login');
+       // 管理者でログインしていないため、管理者ログインページにリダイレクトされる;
+       $response->assertStatus(302);
+       $response->assertRedirect('admin/login');
     }
 
     /**
@@ -99,15 +90,15 @@ class ShopTest extends TestCase
      */
     public function test_admin_can_access_admin_shop_show()
     {
-        $admin = new Administrator(); 
-        $admin->email = 'admin@example.com';
-        $admin->password = Hash::make('nagoyameshi');
-        $admin->name = 'nagoyameshi';  
-        $admin->save();
+        // 管理者データ作成
+       $admin = Administrator::factory()->create();
 
-        $response = $this->actingAs($admin, 'admin')->get(route('admin.shops.show'));
+        //店舗データ作成
+        $shop = Shop::factory()->create();
 
-        $response->assertStatus(200);
+       // 会員詳細ページにアクセス
+       $response = $this->actingAs($admin, 'admin')->get('/admin/shops/' . $shop->id);
+       $response->assertStatus(200);
     }
 
     // createアクション（店舗登録ページ）
@@ -128,14 +119,8 @@ class ShopTest extends TestCase
         // アクセス先の会員データを作成
         $member = Member::factory()->create();
 
-        // ログイン
-        $response = $this->post('/login', [
-           'email' => $member->email,
-           'password' => 'password',
-       ]);
-
        // 店舗登録ページにアクセス
-        $response = $this->get(route('admin.shops.create'));
+       $response = $this->actingAs($member, 'web')->get(route('admin.shops.create'));
 
        // 管理者でログインしていないため、管理者ログインページにリダイレクトされる
        $response->assertStatus(302);
@@ -147,14 +132,11 @@ class ShopTest extends TestCase
      */
     public function test_admin_can_access_admin_shop_create()
     {
-        $admin = new Administrator(); 
-        $admin->email = 'admin@example.com';
-        $admin->password = Hash::make('nagoyameshi');
-        $admin->name = 'nagoyameshi';  
-        $admin->save();
+         // 管理者データ作成
+       $admin = Administrator::factory()->create();
 
+        // 店舗登録ページにアクセス
         $response = $this->actingAs($admin, 'admin')->get(route('admin.shops.create'));
-
         $response->assertStatus(200);
     }
 
@@ -164,7 +146,7 @@ class ShopTest extends TestCase
      */
     public function test_guest_cannot_store_shop()
     {
-        $response = $this->get(route('admin.shops.store'));
+        $response = $this->post('/admin/shops', []);
         $response->assertRedirect(route('admin.login'));
     }
 
@@ -176,13 +158,9 @@ class ShopTest extends TestCase
        // アクセス先の会員データを作成
        $member = Member::factory()->create();
 
-       // ログイン
-       $response = $this->post('/login', [
-           'email' => $member->email,
-           'password' => 'password',
-       ]);
-        $response = $this->get(route('admin.shops.store'));
-        $response->assertRedirect(route('admin.login'));
+       // 店舗登録できないため、管理者ログインページにリダイレクトされる
+       $response = $this->actingAs($member, 'web')->post('/admin/shops', []);
+       $response->assertRedirect(route('admin.login'));
     }
 
     /**
@@ -193,13 +171,7 @@ class ShopTest extends TestCase
        // 管理者データ作成
        $admin = Administrator::factory()->create();
 
-       // ログイン
-       $response = $this->post('/admin/login', [
-           'email' => $admin->email,
-           'password' => 'password',
-       ]);
-
-        $response = $this->post(route('admin.shops.store'), [
+       $response = $this->actingAs($admin, 'admin')->post('/admin/shops', [
             'name' => 'テスト',
             'description' => 'テスト',
             'lowest_price' => 1000,
@@ -237,14 +209,8 @@ class ShopTest extends TestCase
        // アクセス先の会員データを作成
        $member = Member::factory()->create();
 
-        // ログイン
-        $response = $this->post('/admin/login', [
-           'email' => $member->email,
-           'password' => 'password',
-       ]);
-
-       // 店舗登録ページにアクセス
-        $response = $this->get(route('admin.shops.edit',));
+       // 店舗編集ページにアクセス
+       $response = $this->actingAs($member, 'web')->get(route('admin.shops.edit'));
 
        // 管理者でログインしていないため、管理者ログインページにリダイレクトされる
         $response->assertStatus(302);
@@ -256,14 +222,11 @@ class ShopTest extends TestCase
      */
     public function test_admin_can_access_admin_shop_edit()
     {
-        $admin = new Administrator(); 
-        $admin->email = 'admin@example.com';
-        $admin->password = Hash::make('nagoyameshi');
-        $admin->name = 'nagoyameshi';  
-        $admin->save();
+         // 管理者データ作成
+        $admin = Administrator::factory()->create();
 
+        // 店舗編集ページにアクセス
         $response = $this->actingAs($admin, 'admin')->get(route('admin.shops.edit'));
-
         $response->assertStatus(200);
     }
 
@@ -273,8 +236,12 @@ class ShopTest extends TestCase
      */
     public function test_guest_cannot_update_shop()
     {
-        $response = $this->get(route('admin.shops.'));
-        $response->assertRedirect(route('admin.login'));
+       // 店舗データ作成
+       $shop = Shop::factory()->create();
+
+       //店舗を更新できないため、管理者ログインページにリダイレクトされる
+       $response = $this->put('/admin/shops/' . $shop->id, []);
+       $response->assertRedirect(route('admin.login'));
     }
 
     /**
@@ -285,14 +252,7 @@ class ShopTest extends TestCase
        // アクセス先の会員データを作成
        $member = Member::factory()->create();
 
-        // ログイン
-        $response = $this->post('login', [
-           'email' => $member->email,
-           'password' => 'password',
-       ]);
-
-       // 店舗一覧ページにアクセス
-        $response = $this->get(route('admin.shops.index',));
+    　　// 店舗一覧ページにアクセス
 
        // 管理者でログインしていないため、管理者ログインページにリダイレクトされる
         $response->assertStatus(302);

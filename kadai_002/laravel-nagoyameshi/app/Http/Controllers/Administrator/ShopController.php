@@ -16,12 +16,11 @@ class ShopController extends Controller
         /* キーワードから検索処理 */
         if ($keyword !== null) {
             $shops = Shop::where('name', 'LIKE', "%{$keyword}%")
-                           >paginate(15);
+                           ->paginate(15);
             $total = $shops->total();                                // 取得したデータの総数
         } else {
             $shops = Shop::paginate(15);                             //ページネーション（15件ずつ表示）
             $total = $shops->total();                                // 取得したデータの総数
-            $keyword = null;
         }
 
         // ビューに渡す変数
@@ -38,13 +37,14 @@ class ShopController extends Controller
         return view('admin.shops.edit', compact('shop'));
     }
 
-    public function create()
+    public function create(Shop $shop)
     {
-        return view('admin.shops.create', compact('categories', 'regular_holidays'));
+        return view('admin.shops.create', compact('shop'));
     }
 
     public function store(Request $request)
     {
+        //バリデーションの設定
         $request->validate([
             'name' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,bmp,gif,svg,webp|max:2048',
@@ -58,20 +58,34 @@ class ShopController extends Controller
             'seating_capacity' => 'required|integer',
         ]);
 
-        $shop = new Shop($request->all());
+         //$request内($request->all())にはShopテーブルとは無関係のパラメータが含まれている可能性があるので値を一つずつ代入
+         $shop = new Shop();
+         $shop->name = $request->input('name');
+         $shop->image = $request->input('image');
+         $shop->description = $request->input('description');
+         $shop->lowest_price = $request->input('lowest_price');
+         $shop->highest_price = $request->input('highest_price');
+         $shop->postal_code = $request->input('postal_code');
+         $shop->address = $request->input('address');
+         $shop->opening_time = $request->input('opening_time');
+         $shop->closing_time = $request->input('closing_time');
+         $shop->seating_capacity = $request->input('seating_capacity');
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('shops', 'public');
             $shop->image = $path;
+        } else {
+            $shop->image = "";
         }
 
-        $shop->save();
+        $shop->save();                 //データベースへ保存する
 
         return redirect()->route('admin.shops.index')->with('flash_message', '店舗情報を登録しました。');
     }
 
     public function update(Request $request, shop $shop)
     {
+        //バリデーションの設定
         $request->validate([
             'name' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,bmp,gif,svg,webp|max:2048',
@@ -85,14 +99,29 @@ class ShopController extends Controller
             'seating_capacity' => 'required|integer',
         ]);
 
-        $shop->update($request->all());
+        //$request内($request->all())にはShopテーブルとは無関係のパラメータが含まれている可能性があるので値を一つずつ代入
+        $shop = new Shop();
+        $shop->name = $request->input('name');
+        $shop->image = $request->input('image');
+        $shop->description = $request->input('description');
+        $shop->lowest_price = $request->input('lowest_price');
+        $shop->highest_price = $request->input('highest_price');
+        $shop->postal_code = $request->input('postal_code');
+        $shop->address = $request->input('address');
+        $shop->opening_time = $request->input('opening_time');
+        $shop->closing_time = $request->input('closing_time');
+        $shop->seating_capacity = $request->input('seating_capacity');
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('shops', 'public');
             $shop->update(['image' => $path]);
+        } else {
+            $shop->image = "";
         }
 
-        return redirect()->route('admin.shops.index')->with('flash_message', '店舗を編集しました。');
+        $shop->save();                                //データベースへ保存する
+
+        return redirect()->route('admin.shops.show',$shop)->with('flash_message', '店舗を編集しました。');
     }
 
     public function destroy(shop $shop)
