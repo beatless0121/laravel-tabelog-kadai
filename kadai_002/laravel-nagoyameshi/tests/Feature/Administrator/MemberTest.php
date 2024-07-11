@@ -10,7 +10,7 @@ use App\Models\Member;
                                                   
 class MemberTest extends TestCase
 {
-        use RefreshDatabase;                                                 //データベースをリセットしてくれるトレイト
+    use RefreshDatabase;                                                 //データベースをリセットしてくれるトレイト
         
 
     /**会員一覧ページの検証

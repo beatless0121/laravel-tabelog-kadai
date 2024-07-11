@@ -44,9 +44,10 @@ class ShopController extends Controller
 
     public function store(Request $request)
     {
+
         //バリデーションの設定
         $request->validate([
-            'name' => 'required|string',
+           'name' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,bmp,gif,svg,webp|max:2048',
             'description' => 'required|string',
             'lowest_price' => 'required|integer|min:0|lte:highest_price',
@@ -59,7 +60,7 @@ class ShopController extends Controller
         ]);
 
          //$request内($request->all())にはShopテーブルとは無関係のパラメータが含まれている可能性があるので値を一つずつ代入
-         $shop = new Shop();
+         $shop = new Shop();                                                       //登録する為
          $shop->name = $request->input('name');
          $shop->image = $request->input('image');
          $shop->description = $request->input('description');
@@ -83,7 +84,7 @@ class ShopController extends Controller
         return redirect()->route('admin.shops.index')->with('flash_message', '店舗情報を登録しました。');
     }
 
-    public function update(Request $request, shop $shop)
+    public function update(Request $request, Shop $shop)
     {
         //バリデーションの設定
         $request->validate([
@@ -100,7 +101,6 @@ class ShopController extends Controller
         ]);
 
         //$request内($request->all())にはShopテーブルとは無関係のパラメータが含まれている可能性があるので値を一つずつ代入
-        $shop = new Shop();
         $shop->name = $request->input('name');
         $shop->image = $request->input('image');
         $shop->description = $request->input('description');
@@ -113,19 +113,20 @@ class ShopController extends Controller
         $shop->seating_capacity = $request->input('seating_capacity');
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('shops', 'public');
-            $shop->update(['image' => $path]);
+            $image_path = $request->file('image')->store('public/shops');
+            $shop->image = basename($image_path);
         } else {
-            $shop->image = "";
+            $shop->image = basename('');
         }
 
-        $shop->save();                                //データベースへ保存する
+        $shop->update();                                //データベースを更新する為
 
         return redirect()->route('admin.shops.show',$shop)->with('flash_message', '店舗を編集しました。');
     }
 
-    public function destroy(shop $shop)
+    public function destroy($id)                                             
     {
+        $shop = Shop::find($id);                      //なくても削除機能は実装されてるがテスト時エラー発生する
         $shop->delete();
         return redirect()->route('admin.shops.index')->with('flash_message', '店舗を削除しました。');
     }
