@@ -8,12 +8,12 @@ use App\Models\Shop;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Hash;                                 //ハッシュ値エラー発生の為                            
 use Tests\TestCase;
 
 class ShopTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase;                                            //データベースをリセットしてくれるトレイト
 
     /**
      * indexアクション（店舗一覧ページ）
@@ -150,7 +150,7 @@ class ShopTest extends TestCase
         // アクセス先の会員データを作成
         $member = Member::factory()->create();
 
-        $response = $this->actingAs($member, 'web')->withoutMiddleware()->post('/admin/shops', []);
+        $response = $this->actingAs($member, 'web')->post('/admin/shops', []);
         $response->assertRedirect(route('admin.login'));
     }
 
@@ -246,10 +246,21 @@ class ShopTest extends TestCase
        $member = Member::factory()->create();
 
         // 店舗データ作成
-        $shop = Shop::factory()->create();
+        $old_shop = Shop::factory()->create();
 
-        // 店舗一覧ページにアクセス
-        $response = $this->actingAs($member, 'web')->withoutMiddleware()->put('/admin/shops/' . $shop->id, []);
+        $new_shop = [
+            'name' => 'テスト',
+            'description' => 'テスト',
+            'lowest_price' => 1000,
+            'highest_price' => 5000,
+            'postal_code' => '0000000',
+            'address' => 'テスト',
+            'opening_time' => '10:00',
+            'closing_time' => '20:00',
+            'seating_capacity' => 60,
+        ];
+
+        $response = $this->actingAs($member, 'web')->patch(route('admin.shops.update', $old_shop), $new_shop);
 
         // 管理者でログインしていないため、管理者ログインページにリダイレクトされる
         $response->assertStatus(302);
@@ -263,26 +274,27 @@ class ShopTest extends TestCase
         $admin = Administrator::factory()->create();
 
         // 店舗データ作成
-        $shop = Shop::factory()->create();
+        $old_shop = Shop::factory()->create();
 
-        $response = $this->actingAs($admin, 'admin')->withoutMiddleware()->put('/admin/shops/' . $shop->id, [
-            'name' => '更新テスト',
-            'description' => '更新テスト',
-            'lowest_price' => 1500,
-            'highest_price' => 5500,
-            'postal_code' => '1111111',
-            'address' => '更新テスト',
-            'opening_time' => '09:00',
-            'closing_time' => '21:00',
+        $new_shop = [
+            'name' => 'テスト',
+            'description' => 'テスト',
+            'lowest_price' => 1000,
+            'highest_price' => 5000,
+            'postal_code' => '0000000',
+            'address' => 'テスト',
+            'opening_time' => '10:00',
+            'closing_time' => '20:00',
             'seating_capacity' => 60,
-        ]);
+        ];
 
-        $response->assertRedirect('/admin/shops/' . $shop->id);
+        $response = $this->actingAs($admin, 'admin')->patch(route('admin.shops.update', $old_shop), $new_shop);
 
-        $this->assertDatabaseHas('shops', [
-            'name' => '更新テスト',
-            'description' => '更新テスト',
-        ]);
+        //更新を評価
+        $this->assertDatabaseHas('shops', $new_shop);
+
+        // レスポンスがリダイレクトであることを確認（リダイレクト先の店舗詳細画面を表示する際、何の店舗詳細なのかをパラメータで表示）
+         $response->assertRedirect(route('admin.shops.show', $old_shop));
     }
 
     /**
@@ -308,7 +320,7 @@ class ShopTest extends TestCase
         // 店舗データ作成
         $shop = Shop::factory()->create();
 
-        $response = $this->actingAs($member, 'web')->withoutMiddleware()->delete('/admin/shops/' . $shop->id);
+        $response = $this->actingAs($member, 'web')->delete('/admin/shops/' . $shop->id);
         $response->assertStatus(302);
         $response->assertRedirect(route('admin.login'));
     }
@@ -322,7 +334,7 @@ class ShopTest extends TestCase
         // 店舗データ作成
         $shop = Shop::factory()->create();
 
-        $response = $this->actingAs($admin, 'admin')->withoutMiddleware()->delete('/admin/shops/' . $shop->id);
+        $response = $this->actingAs($admin, 'admin')->delete('/admin/shops/' . $shop->id);
 
         $response->assertRedirect(route('admin.shops.index'));
 
