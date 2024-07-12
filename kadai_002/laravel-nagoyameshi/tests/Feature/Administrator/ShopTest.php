@@ -123,12 +123,10 @@ class ShopTest extends TestCase
     // ログイン済みの管理者は管理者側の店舗登録ページにアクセスできる
     public function test_admin_can_access_admin_shop_create()
     {
-        $admin = new Administrator(); 
-        $admin->email = 'admin@example.com';
-        $admin->password = Hash::make('nagoyameshi');
-        $admin->name = 'nagoyameshi';  
-        $admin->save();
-
+        // 管理者データ作成
+        $admin = Administrator::factory()->create();
+        
+        // 店舗登録ページにアクセス
         $response = $this->actingAs($admin, 'admin')->get(route('admin.shops.create'));
 
         $response->assertStatus(200);
