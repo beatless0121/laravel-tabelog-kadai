@@ -61,7 +61,7 @@ class ShopTest extends TestCase
         // 店舗データ作成
         $shop = Shop::factory()->create();
 
-        $response = $this->get('/admin/shops/' . $shop->id);
+        $response = $this->get(route('admin.shops.show', $shop));
         $response->assertRedirect(route('admin.login'));
     }
 
@@ -75,7 +75,7 @@ class ShopTest extends TestCase
         $shop = Shop::factory()->create();
 
         // 会員詳細ページにアクセス
-        $response = $this->actingAs($member, 'web')->get('/admin/shops/' . $shop->id);
+        $response = $this->actingAs($member, 'web')->get(route('admin.shops.show', $shop));
 
         // 管理者でログインしていないため、管理者ログインページにリダイレクトされる;
         $response->assertStatus(302);
@@ -92,7 +92,7 @@ class ShopTest extends TestCase
         $shop = Shop::factory()->create();
 
         // 会員詳細ページにアクセス
-        $response = $this->actingAs($admin, 'admin')->get('/admin/shops/' . $shop->id);
+        $response = $this->actingAs($admin, 'admin')->get(route('admin.shops.show', $shop));
 
         $response->assertStatus(200);
     }
@@ -195,7 +195,7 @@ class ShopTest extends TestCase
         // 店舗データ作成
         $shop = Shop::factory()->create();
 
-        $response = $this->get('/admin/shops/' . $shop->id);
+        $response = $this->get(route('admin.shops.edit', $shop));
         $response->assertRedirect(route('admin.login'));
     }
 
@@ -209,7 +209,7 @@ class ShopTest extends TestCase
         $shop = Shop::factory()->create();
 
        // 店舗登録ページにアクセス
-        $response = $this->actingAs($member, 'web')->get('/admin/shops/' . $shop->id);
+        $response = $this->actingAs($member, 'web')->get(route('admin.shops.edit', $shop));
 
        // 管理者でログインしていないため、管理者ログインページにリダイレクトされる
         $response->assertStatus(302);
@@ -225,7 +225,7 @@ class ShopTest extends TestCase
         // 店舗データ作成
         $shop = Shop::factory()->create();
 
-        $response = $this->actingAs($admin, 'admin')->get('/admin/shops/' . $shop->id);
+        $response = $this->actingAs($admin, 'admin')->get(route('admin.shops.edit', $shop));
 
         $response->assertStatus(200);
     }
@@ -239,7 +239,7 @@ class ShopTest extends TestCase
         // 店舗データ作成
         $shop = Shop::factory()->create();
 
-        $response = $this->put('/admin/shops/' . $shop->id, []);
+        $response = $this->put('/admin/shops/' . $shop, []);
         $response->assertRedirect(route('admin.login'));
     }
 
@@ -328,7 +328,7 @@ class ShopTest extends TestCase
         // 店舗データ作成
         $shop = Shop::factory()->create();
 
-        $response = $this->delete('/admin/shops/' . $shop->id);
+        $response = $this->delete(route('admin.shops.destroy', $shop));
 
         $response->assertRedirect(route('admin.login'));
     }
@@ -342,7 +342,7 @@ class ShopTest extends TestCase
         // 店舗データ作成
         $shop = Shop::factory()->create();
 
-        $response = $this->actingAs($member, 'web')->delete('/admin/shops/' . $shop->id);
+        $response = $this->actingAs($member, 'web')->delete(route('admin.shops.destroy', $shop));
         $response->assertStatus(302);
         $response->assertRedirect(route('admin.login'));
     }
@@ -356,7 +356,7 @@ class ShopTest extends TestCase
         // 店舗データ作成
         $shop = Shop::factory()->create();
 
-        $response = $this->actingAs($admin, 'admin')->delete('/admin/shops/' . $shop->id);
+        $response = $this->actingAs($admin, 'admin')->delete(route('admin.shops.destroy', $shop));
 
         $response->assertRedirect(route('admin.shops.index'));
 

@@ -141,9 +141,8 @@ class ShopController extends Controller
         return redirect()->route('admin.shops.show',$shop)->with('flash_message', '店舗を編集しました。');
     }
 
-    public function destroy($id)                                             
+    public function destroy(Shop $shop)                                             
     {
-        $shop = Shop::find($id);                      //なくても削除機能は実装されてるがテスト時エラー発生する
         $shop->delete();
         return redirect()->route('admin.shops.index')->with('flash_message', '店舗を削除しました。');
     }
