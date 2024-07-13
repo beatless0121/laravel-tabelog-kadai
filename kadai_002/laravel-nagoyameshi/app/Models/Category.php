@@ -11,4 +11,9 @@ class Category extends Model
     protected $fillable = [
         'name',
     ];
+
+    //カテゴリ設定の為、追加
+    public function shops() {
+        return $this->belongsToMany(Shop::class)->withTimestamps();
+    }
 }

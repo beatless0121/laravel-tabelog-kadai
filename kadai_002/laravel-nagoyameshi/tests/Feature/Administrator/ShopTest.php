@@ -5,6 +5,7 @@ namespace Tests\Feature\Administrator;
 use App\Models\Member; 
 use App\Models\Administrator;
 use App\Models\Shop;
+use App\Models\Category;                                             //カテゴリー設定の為、追加
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
@@ -137,7 +138,7 @@ class ShopTest extends TestCase
      */
     // 未ログインのユーザーは店舗を登録できない
     public function test_guest_cannot_store_shop()
-    {
+    {      
         $response = $this->post('/admin/shops', []);
         $response->assertRedirect(route('admin.login'));
     }
@@ -158,6 +159,10 @@ class ShopTest extends TestCase
         // 管理者データ作成
         $admin = Administrator::factory()->create();
 
+       //カテゴリー設定の為、追加
+        $categories = Category::factory()->count(3)->create();
+        $category_ids = $categories->pluck('id')->toArray();
+
         $response = $this->actingAs($admin, 'admin')->withoutMiddleware()->post('/admin/shops', [
             'name' => 'テスト',
             'description' => 'テスト',
@@ -168,6 +173,7 @@ class ShopTest extends TestCase
             'opening_time' => '10:00',
             'closing_time' => '20:00',
             'seating_capacity' => 50,
+            'category_ids' => $category_ids,
         ]);
 
         // レスポンスがリダイレクトであることを確認
@@ -246,6 +252,10 @@ class ShopTest extends TestCase
         // 店舗データ作成
         $old_shop = Shop::factory()->create();
 
+        //カテゴリー設定の為、追加
+        $categories = Category::factory()->count(3)->create();
+        $category_ids = $categories->pluck('id')->toArray();
+
         $new_shop = [
             'name' => 'テスト',
             'description' => 'テスト',
@@ -256,6 +266,7 @@ class ShopTest extends TestCase
             'opening_time' => '10:00',
             'closing_time' => '20:00',
             'seating_capacity' => 60,
+            'category_ids' => $category_ids,
         ];
 
         $response = $this->actingAs($member, 'web')->patch(route('admin.shops.update', $old_shop), $new_shop);
@@ -274,6 +285,10 @@ class ShopTest extends TestCase
         // 店舗データ作成
         $old_shop = Shop::factory()->create();
 
+        //カテゴリー設定の為、追加
+        $categories = Category::factory()->count(3)->create();
+        $category_ids = $categories->pluck('id')->toArray();
+
         $new_shop = [
             'name' => 'テスト',
             'description' => 'テスト',
@@ -284,12 +299,21 @@ class ShopTest extends TestCase
             'opening_time' => '10:00',
             'closing_time' => '20:00',
             'seating_capacity' => 60,
+            'category_ids' => $category_ids,
         ];
 
         $response = $this->actingAs($admin, 'admin')->patch(route('admin.shops.update', $old_shop), $new_shop);
 
-        //更新を評価
-        $this->assertDatabaseHas('shops', $new_shop);
+        //カラムがないというエラー発生の為、修正
+        unset($new_shop['category_ids']);
+         $this->assertDatabaseHas('shops', $new_shop);
+
+         $shop = Shop::latest('id')->first();
+ 
+         //更新を評価（カテゴリ設定追加の為、修正）
+         foreach ($category_ids as $category_id) {
+             $this->assertDatabaseHas('category_shop', ['shop_id' => $shop->id, 'category_id' => $category_id]);
+            }
 
         // レスポンスがリダイレクトであることを確認（リダイレクト先の店舗詳細画面を表示する際、何の店舗詳細なのかをパラメータで表示）
          $response->assertRedirect(route('admin.shops.show', $old_shop));

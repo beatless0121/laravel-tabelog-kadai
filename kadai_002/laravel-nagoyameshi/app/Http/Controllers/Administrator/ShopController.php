@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Administrator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Shop;                                                  //店舗管理機能（管理者側）追加の為
+use App\Models\Category;                                              //カテゴリ設定の為
 
 class ShopController extends Controller
 {
@@ -25,6 +26,7 @@ class ShopController extends Controller
 
         // ビューに渡す変数
         return view('admin.shops.index', compact('shops','total', 'keyword'));
+
     }
 
     public function show(Shop $shop)
@@ -34,12 +36,18 @@ class ShopController extends Controller
 
     public function edit(Shop $shop)
     {
-        return view('admin.shops.edit', compact('shop'));
+        $categories = Category::all();
+        // 設定されたカテゴリのIDを配列化する
+        $category_ids = $shop->categories->pluck('id')->toArray();
+
+        return view('admin.shops.edit', compact('shop','categories', 'category_ids'));
     }
 
     public function create(Shop $shop)
     {
-        return view('admin.shops.create', compact('shop'));
+        //カテゴリ設定の為、修正
+        $categories = Category::all();
+        return view('admin.shops.create', compact('shop','categories'));
     }
 
     public function store(Request $request)
@@ -81,6 +89,11 @@ class ShopController extends Controller
 
         $shop->save();                 //データベースへ保存する
 
+        //カテゴリ設定の為、追加
+        $category_ids = array_filter($request->input('category_ids'));
+        $shop->categories()->sync($category_ids);
+
+
         return redirect()->route('admin.shops.index')->with('flash_message', '店舗情報を登録しました。');
     }
 
@@ -120,6 +133,10 @@ class ShopController extends Controller
         }
 
         $shop->update();                                //データベースを更新する為
+
+        //カテゴリ設定の為、追加
+        $category_ids = array_filter($request->input('category_ids'));
+        $shop->categories()->sync($category_ids);
 
         return redirect()->route('admin.shops.show',$shop)->with('flash_message', '店舗を編集しました。');
     }

@@ -20,4 +20,9 @@ class Shop extends Model
         'closing_time',
         'seating_capacity',
     ];
+
+    //カテゴリ設定の為、追加
+    public function categories() {
+        return $this->belongsToMany(Category::class)->withTimestamps();
+    }
 }
