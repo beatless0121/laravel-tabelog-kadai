@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Shop;                                                  //店舗管理機能（管理者側）追加の為
 use App\Models\Category;                                              //カテゴリ設定の為
+use App\Models\RegularHoliday;                                       //定休日設定の為
 
 class ShopController extends Controller
 {
@@ -36,18 +37,27 @@ class ShopController extends Controller
 
     public function edit(Shop $shop)
     {
+        //カテゴリ設定の為、修正
         $categories = Category::all();
+        
         // 設定されたカテゴリのIDを配列化する
         $category_ids = $shop->categories->pluck('id')->toArray();
 
-        return view('admin.shops.edit', compact('shop','categories', 'category_ids'));
+        //定休日設定の為、追加
+        $regular_holidays = RegularHoliday::all();
+
+        return view('admin.shops.edit', compact('shop','categories', 'category_ids','regular_holidays'));
     }
 
     public function create(Shop $shop)
     {
         //カテゴリ設定の為、修正
         $categories = Category::all();
-        return view('admin.shops.create', compact('shop','categories'));
+
+        //定休日設定の為、追加
+        $regular_holidays = RegularHoliday::all();
+
+        return view('admin.shops.create', compact('shop','categories','regular_holidays'));
     }
 
     public function store(Request $request)
@@ -93,7 +103,10 @@ class ShopController extends Controller
         $category_ids = array_filter($request->input('category_ids'));
         $shop->categories()->sync($category_ids);
 
-
+         //定休日設定の為、追加
+         $regular_holiday_ids =  $request->input('regular_holiday_ids');
+         $shop->regular_holidays()->sync($regular_holiday_ids);
+ 
         return redirect()->route('admin.shops.index')->with('flash_message', '店舗情報を登録しました。');
     }
 
@@ -137,6 +150,10 @@ class ShopController extends Controller
         //カテゴリ設定の為、追加
         $category_ids = array_filter($request->input('category_ids'));
         $shop->categories()->sync($category_ids);
+
+        //定休日設定の為、追加
+        $regular_holiday_ids = $request->input('regular_holiday_ids');
+        $shop->regular_holidays()->sync($regular_holiday_ids);
 
         return redirect()->route('admin.shops.show',$shop)->with('flash_message', '店舗を編集しました。');
     }

@@ -25,4 +25,9 @@ class Shop extends Model
     public function categories() {
         return $this->belongsToMany(Category::class)->withTimestamps();
     }
+
+     //定休日設定の為、追加
+     public function regular_holidays() {
+        return $this->belongsToMany(RegularHoliday::class)->withTimestamps();
+    }
 }
