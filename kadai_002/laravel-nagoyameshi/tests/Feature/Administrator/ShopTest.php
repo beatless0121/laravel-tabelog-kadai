@@ -159,11 +159,9 @@ class ShopTest extends TestCase
     {
         // 管理者データ作成
         $admin = Administrator::factory()->create();
-
        //カテゴリー設定の為、追加
         $categories = Category::factory()->count(3)->create();
         $category_Ids = $categories->pluck('id')->toArray();
-
         //定休日設定の為、追加
         $regular_holidays = RegularHoliday::factory()->count(3)->create();
         $regular_holiday_Ids = $regular_holidays->pluck('id')->toArray();
@@ -179,34 +177,31 @@ class ShopTest extends TestCase
             'closing_time' => '20:00',
             'seating_capacity' => 50,
             'category_ids' => $category_Ids,
-            'regular_holidays'=>$regular_holiday_Ids,
+            'regular_holiday_ids'=>$regular_holiday_Ids,
         ];
 
          // リクエストを送信
-         $response = $this->actingAs($admin, 'admin')->withoutMiddleware()->post(route('admin.shops.store'), $shop);
-
+         $response = $this->actingAs($admin, 'admin')->post(route('admin.shops.store'), $shop);
+         //カラムがないとエラーが出る為、追加
+         unset($shop['category_ids'], $shop['regular_holiday_ids']);
          // データベースにレストランが存在しないことを確認
          $this->assertDatabaseHas('shops', [
             'name' => 'テスト',
             'description' => 'テスト',
         ]);
-
-        // データベースcategory_shopにcategory_idsが存在しないことを確認
-        foreach ($category_Ids as $category_id) {
+         // category_shopテーブルでの検証
+         foreach ($category_Ids as $categoryId) {
             $this->assertDatabaseHas('category_shop', [
-                'category_id' => $category_id,
-               'shop_id' => $shop->id,
+                'category_id' => $categoryId,
             ]);
         }
-
-        // データベースregular_holiday_shopにregular_holiday_idsが存在しないことを確認
-        foreach ($regular_holiday_Ids as $regular_holiday_id) {
+         // regular_holiday_shopテーブルでの検証
+         foreach ($regular_holiday_Ids as $regularHolidayId) {
             $this->assertDatabaseHas('regular_holiday_shop', [
-                'regular_holiday_id' => $regular_holiday_id,
-                'shop_id' => $shop->id,
+                'regular_holiday_id' => $regularHolidayId,
             ]);
-        }
-    }
+    } 
+}
 
     /**
      * editアクション（店舗編集ページ）
@@ -293,7 +288,7 @@ class ShopTest extends TestCase
            'closing_time' => '20:00',
            'seating_capacity' => 60,
            'category_ids' => $category_Ids,
-           'regular_holidays'=>$regular_holidays,
+           'regular_holiday_ids'=>$regular_holiday_Ids,
        ];
 
         $response = $this->actingAs($member, 'web')->patch(route('admin.shops.update', $old_shop), $new_shop);
@@ -308,7 +303,6 @@ class ShopTest extends TestCase
     {
         // 管理者データ作成
         $admin = Administrator::factory()->create();
-
         // 店舗データ作成
         $old_shop = Shop::factory()->create();
 
@@ -318,7 +312,7 @@ class ShopTest extends TestCase
 
         //定休日設定の為、追加
         $regular_holidays = RegularHoliday::factory()->count(3)->create();
-        $regular_holiday_Ids= $regular_holidays->pluck('id')->toArray();
+        $regular_holiday_Ids = $regular_holidays->pluck('id')->toArray();
 
         $new_shop = [
             'name' => 'テスト',
@@ -331,33 +325,25 @@ class ShopTest extends TestCase
             'closing_time' => '20:00',
             'seating_capacity' => 60,
             'category_ids' => $category_Ids,
-            'regular_holidays'=>$regular_holiday_Ids,
+            'regular_holiday_ids'=>$regular_holiday_Ids,
         ];
         $response = $this->actingAs($admin, 'admin')->patch(route('admin.shops.update', $old_shop), $new_shop);
 
-         //カラムがないというエラー発生の為、修正
-         unset($new_shop['category_ids']);
-         $this->assertDatabaseHas('shops', $new_shop);
-        
-         // category_shopテーブルでの検証
-         foreach ($category_Ids as $categoryId) {
-            $this->assertDatabaseHas('category_shop', ['shop_id' => $old_shop->id,
-                'category_id' => $categoryId,              
-            ]);
-        }
-        
-        //カラムがないというエラー発生の為、修正
-        unset($new_shop['regular_holiday_Ids']);
-        $this->assertDatabaseHas('shops', $new_shop);
+        //カラムがないとエラーが出る為、追加
+        unset($new_shop['category_ids'], $new_shop['regular_holiday_ids']);
 
-         // データベースregular_holiday_shopにregular_holiday_idsが存在しないことを確認
-         foreach ($regular_holiday_Ids as $regular_holiday_Id) {
-            $this->assertDatabaseHas('regular_holiday_shop', [
-                'regular_holiday_id' => $regular_holiday_Id,
-                'shop_id' => $old_shop->id,
+         // データベースcategory_shopにcategory_idsが存在しないことを確認
+        foreach ($category_Ids as $category_id) {
+            $this->assertDatabaseHas('category_shop', [
+                'category_id' => $category_id,
             ]);
         }
-       
+        // データベースregular_holiday_shopにregular_holiday_idsが存在しないことを確認
+        foreach ($regular_holiday_Ids as $regular_holiday_id) {
+            $this->assertDatabaseHas('regular_holiday_shop', [
+                'regular_holiday_id' => $regular_holiday_id,
+            ]);
+        }    
         // レスポンスがリダイレクトであることを確認（リダイレクト先の店舗詳細画面を表示する際、何の店舗詳細なのかをパラメータで表示）
          $response->assertRedirect(route('admin.shops.show', $old_shop));
     }

@@ -27,7 +27,6 @@ class ShopController extends Controller
 
         // ビューに渡す変数
         return view('admin.shops.index', compact('shops','total', 'keyword'));
-
     }
 
     public function show(Shop $shop)
@@ -62,7 +61,6 @@ class ShopController extends Controller
 
     public function store(Request $request)
     {
-
         //バリデーションの設定
         $request->validate([
            'name' => 'required|string',
@@ -96,15 +94,12 @@ class ShopController extends Controller
         } else {
             $shop->image = "";
         }
-
-        $shop->save();                 //データベースへ保存する
-
+        $shop->save();                 //データベースへ保存する       
         //カテゴリ設定の為、追加
         $category_ids = array_filter($request->input('category_ids'));
         $shop->categories()->sync($category_ids);
-
          //定休日設定の為、追加
-         $regular_holiday_ids =  $request->input('regular_holiday_ids');
+         $regular_holiday_ids = array_filter($request->input('regular_holiday_ids'));
          $shop->regular_holidays()->sync($regular_holiday_ids);
  
         return redirect()->route('admin.shops.index')->with('flash_message', '店舗情報を登録しました。');
@@ -151,8 +146,8 @@ class ShopController extends Controller
         $category_ids = array_filter($request->input('category_ids'));
         $shop->categories()->sync($category_ids);
 
-        //定休日設定の為、追加
-        $regular_holiday_ids = $request->input('regular_holiday_ids');
+        //定休日設定の為、追加      
+        $regular_holiday_ids = array_filter($request->input('regular_holiday_ids'));
         $shop->regular_holidays()->sync($regular_holiday_ids);
 
         return redirect()->route('admin.shops.show',$shop)->with('flash_message', '店舗を編集しました。');
