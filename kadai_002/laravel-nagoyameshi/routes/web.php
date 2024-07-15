@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Administrator;                                     //管理者認証機能（管理者側）追加の為（Administratorでクラスパスを定義しているため）
+use App\Http\Controllers\CompanyController;
 
 
 /*
@@ -27,6 +28,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
     Route::get('members/{member}', [Administrator\MemberController::class, 'show'])->name('members.show'); 
     Route::resource('shops', Administrator\ShopController::class);                                                         //店舗管理機能（管理者側）追加の為
     Route::resource('categories', Administrator\CategoryController::class)->only(['index', 'store', 'update', 'destroy']);    //カテゴリ管理機能（管理者側）追加の為
+    Route::resource('company', Administrator\CompanyController::class)->only(['index', 'edit', 'update']);                    //管理者側の基本情報設定機能追加の為
+    Route::resource('terms',  Administrator\TermController::class)->only(['index', 'edit', 'update']);                        //管理者側の基本情報設定機能追加の為
  });
 
 

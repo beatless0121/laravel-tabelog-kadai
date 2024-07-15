@@ -30,8 +30,8 @@
                             <a class="dropdown-item" href="{{ route('admin.members.index') }}">会員一覧</a>
                             <a class="dropdown-item" href="{{ route('admin.shops.index') }}">店舗一覧</a>
                             <a class="dropdown-item" href="{{ route('admin.categories.index') }}">カテゴリ一覧</a>
-                            <a class="dropdown-item" href="#">会社概要</a>
-                            <a class="dropdown-item" href="#">利用規約</a>
+                            <a class="dropdown-item" href="{{ route('admin.company.index') }}">会社概要</a>
+                            <a class="dropdown-item" href="{{ route('admin.terms.index') }}">利用規約</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('admin.logout') }}"
                             onclick="event.preventDefault();
@@ -60,7 +60,7 @@
                     @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::Member()->name }}
+                                {{ Auth::member()->name }}
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
