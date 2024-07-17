@@ -21,15 +21,15 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * * Handle an incoming authentication request.　　　　　　　　　　　//ログイン、ログアウト後にフラッシュメッセージを表示させる
      */
-    public function store(LoginRequest $request): RedirectResponse
+      public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended(RouteServiceProvider::HOME)->with('flash_message', 'ログインしました。');
     }
 
     /**
@@ -43,6 +43,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');                                           //会員ログアウト→トップページへ
+        return redirect('/')->with('flash_message', 'ログアウトしました。');                   //会員ログアウト→トップページへ
     }
 }
