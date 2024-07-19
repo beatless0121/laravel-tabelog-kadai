@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;                                          //並び替え機能有効化
 
 class Shop extends Model
 {
-    use HasFactory;
+    use HasFactory, Sortable;                                               //並び替え機能有効化
+
     protected $fillable = [
         'name',
         'image',

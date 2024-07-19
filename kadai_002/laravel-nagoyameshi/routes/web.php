@@ -5,6 +5,7 @@ use App\Http\Controllers\Administrator;                                     //�
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\ShopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +25,10 @@ Route::get('/', function () {
 require __DIR__.'/auth.php';
 
 Route::group(['middleware' => 'guest:admin'], function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/', [HomeController::class, 'index'])->name('home');                                         //会員側のトップページ追加の為
+    Route::resource('shops', ShopController::class)->only(['index','show']);                                 //会員側の店舗一覧ページ追加の為
 
-     Route::group(['middleware' => ['auth', 'verified']], function () {
+     Route::group(['middleware' => ['auth', 'verified']], function () {                                      //会員側の会員管理機能追加の為
          Route::resource('member', MemberController::class)->only(['index', 'edit', 'update']);
      });
 });
