@@ -51,7 +51,7 @@ class ShopTest extends TestCase
     }
 
     // ・未ログインのユーザーは会員側の店舗詳細ページにアクセスできる
-   public function test_guest_can_access_restaurant_show_page()
+   public function test_guest_can_access_shop_show_page()
    {
        $shop = Shop::factory()->create();
 
@@ -61,7 +61,7 @@ class ShopTest extends TestCase
    }
 
 //   ・ログイン済みの一般ユーザーは会員側の店舗詳細ページにアクセスできる
-    public function test_authenticated_user_can_access_restaurant_show_page()
+    public function test_authenticated_user_can_access_shop_show_page()
     {
         // 会員データ作成
         $member = Member::factory()->create();
@@ -74,7 +74,7 @@ class ShopTest extends TestCase
      }
 
    // ・ログイン済みの管理者は会員側の店舗詳細ページにアクセスできない
-    public function test_admin_cannot_access_restaurant_show_page()
+    public function test_admin_cannot_access_shop_show_page()
    {
        // 管理者データ作成
        $admin = Administrator::factory()->create();
