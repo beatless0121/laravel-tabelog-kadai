@@ -33,8 +33,7 @@ Route::group(['middleware' => 'guest:admin'], function () {
 
      Route::group(['middleware' => ['auth', 'verified']], function () {                                      //会員側の会員管理機能追加の為
          Route::resource('member', MemberController::class)->only(['index', 'edit', 'update']);
-     });
-});
+     
 
  //一般ユーザとしてログイン済かつメール認証済で有料プラン未登録の場合
  Route::group(['middleware' => [NotSubscribed::class]], function () {
@@ -48,7 +47,9 @@ Route::group(['middleware' => [Subscribed::class]], function () {
     Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
     Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
     Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
-}); 
+});
+   }); 
+});
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {          //管理者認証機能（管理者側）追加の為
     Route::get('home', [Administrator\HomeController::class, 'index'])->name('home');

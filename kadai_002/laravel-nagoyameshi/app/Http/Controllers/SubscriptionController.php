@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Member;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class SubscriptionController extends Controller
 {
@@ -25,16 +26,9 @@ class SubscriptionController extends Controller
  
      public function store(Request $request)
      {
-         $member = $request->user();
-         
-         $paymentMethodId = $request->input('paymentMethodId');
+        $request->user()->newSubscription('premium_plan', 'price_1PeSSXLjZq1DMeKQW2RciScN')->create($request->paymentMethodId);
  
-         $member->newSubscription('premium_plan', 'price_1PeSSXLjZq1DMeKQW2RciScN')
-              ->create($paymentMethodId);
- 
- 
- 
-         return redirect()->route('home')->with('flash_message', '有料プランへの登録が完了しました。');
+        return redirect()->route('home')->with('flash_message', '有料プランへの登録が完了しました。');
      }
  
      //editアクション

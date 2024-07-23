@@ -43,7 +43,7 @@ class SubscriptionTest extends TestCase
             $member = Member::factory()->create();
             $member->newSubscription('premium_plan', 'price_1PeSSXLjZq1DMeKQW2RciScN')->create('pm_card_visa');
     
-            $response = $this->actingAs($member,'web')->get(route('subscription.create'));
+            $response = $this->actingAs($member)->get(route('subscription.create'));
     
             $response->assertRedirect(route('subscription.edit'));
         }
