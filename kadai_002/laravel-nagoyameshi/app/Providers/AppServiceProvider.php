@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Models\Member;
+use App\Models\Member;                                     //usersテーブルからmembersテーブルに変更の為、追加（決済システム）
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;                       //ページネーションをBootstrap対応に変更する為、追加
-use Laravel\Cashier\Cashier;
+use Laravel\Cashier\Cashier;                               //usersテーブルからmembersテーブルに変更の為、追加（決済システム）
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,8 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-         //ページネーションをBootstrap対応に変更する為、追加
-         Paginator::useBootstrap();
-         Cashier::useCustomerModel(Member::class);
+         
+         Paginator::useBootstrap();                             //ページネーションをBootstrap対応に変更する為、追加
+         Cashier::useCustomerModel(Member::class);              //usersテーブルからmembersテーブルに変更の為、追加（決済システム）
     }
 }

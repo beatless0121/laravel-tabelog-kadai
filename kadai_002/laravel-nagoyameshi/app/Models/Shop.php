@@ -23,13 +23,24 @@ class Shop extends Model
         'seating_capacity',
     ];
 
-    //カテゴリ設定の為、追加
+    //リレーションシップ設定（カテゴリ設定の為）
     public function categories() {
         return $this->belongsToMany(Category::class)->withTimestamps();
     }
 
-     //定休日設定の為、追加
+     //リレーションシップ設定（定休日設定の為)
      public function regular_holidays() {
         return $this->belongsToMany(RegularHoliday::class)->withTimestamps();
+    }
+
+    //リレーションシップ設定（レビュー機能設定の為)
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    //レビュー機能設定の為、追加
+    public function ratingSortable($query, $direction) {
+        return $query->withAvg('reviews', 'score')->orderBy('reviews_avg_score', $direction);
     }
 }

@@ -51,4 +51,10 @@ class Member extends Authenticatable implements MustVerifyEmail                 
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+     //リレーションシップ設定（レビュー機能設定の為）
+     public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }
