@@ -372,7 +372,7 @@ class ReviewTest extends TestCase
               'content' => 'テスト更新'
           ];
   
-          $response = $this->actingAs($member)->patch(route('shop.reviews.update', [$shop, $old_review]), $new_review);
+          $response = $this->actingAs($member)->patch(route('shops.reviews.update', [$shop, $old_review]), $new_review);
   
           $this->assertDatabaseHas('reviews', $new_review);
           $response->assertRedirect(route('shops.reviews.index', $shop));
@@ -398,7 +398,7 @@ class ReviewTest extends TestCase
               'content' => 'テスト更新'
           ];
   
-          $response = $this->actingAs($admin, 'admin')->patch(route('shop.reviews.update', [$shop, $old_review]), $new_review);
+          $response = $this->actingAs($admin, 'admin')->patch(route('shops.reviews.update', [$shop, $old_review]), $new_review);
   
           $this->assertDatabaseMissing('reviews', $new_review);
           $response->assertRedirect(route('admin.home'));
@@ -446,7 +446,7 @@ class ReviewTest extends TestCase
       {
           // 会員データ作成
           $member = Member::factory()->create();
-          $member->newSubscription('premium_plan', '')->create('pm_card_visa');price_1PeSSXLjZq1DMeKQW2RciScN;
+          $member->newSubscription('premium_plan', 'price_1PeSSXLjZq1DMeKQW2RciScN')->create('pm_card_visa');
           $other_member = Member::factory()->create();
   
           $shop = Shop::factory()->create();
@@ -473,7 +473,7 @@ class ReviewTest extends TestCase
   
           $review = Review::factory()->create([
               'shop_id' => $shop->id,
-              'member_id' => $member->id
+              'member_id' =>  $member->id
           ]);
   
           $response = $this->actingAs($member)->delete(route('shops.reviews.destroy', [$shop, $review]));

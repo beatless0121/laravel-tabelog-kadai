@@ -56,6 +56,11 @@ class ReviewController extends Controller
      //editアクション
      public function edit(Shop $shop, Review $review)
      {
+         // 他人のレビューを編集できないようにする
+         if ($review->member_id !== auth()->id()) {
+            return redirect()->route('shops.reviews.index', $shop)->with('error_message', '不正なアクセスです。');
+        }
+        
          return view('reviews.edit', compact('shop', 'review'));
      }
      
@@ -86,7 +91,13 @@ class ReviewController extends Controller
      //destroyアクション
      public function destroy(shop $shop, Review $review)
      {
-         $review->delete();
-         return redirect()->route('shops.reviews.index', $shop)->with('flash_message', 'レビューを削除しました。');
-     }
+        // 他人のレビューを編集できないようにする
+        if ($review->member_id !== Auth::id()) {
+            return redirect()->route('shops.reviews.index', $shop)->with('error_message', '不正なアクセスです。');
+        } else {
+            $review->delete();
+
+            return redirect()->route('shops.reviews.index', $shop)->with('flash_message', 'レビューを削除しました。');
+        }
+    }
 }

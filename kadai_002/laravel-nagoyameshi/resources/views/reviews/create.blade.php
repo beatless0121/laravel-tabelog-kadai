@@ -31,7 +31,7 @@
                         <a class="nav-link link-dark" href="{{ route('shops.show', $shop) }}">トップ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link link-dark" href="#">予約</a>
+                        <a class="nav-link link-dark" href="{{ route('shops.reservations.create', $shop) }}">予約</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active text-white nagoyameshi-bg" aria-current="page" href="{{ route('shops.reviews.index', $shop) }}">レビュー</a>

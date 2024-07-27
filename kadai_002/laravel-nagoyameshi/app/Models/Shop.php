@@ -39,8 +39,20 @@ class Shop extends Model
         return $this->hasMany(Review::class);
     }
 
-    //レビュー機能設定の為、追加
+    //リレーションシップ設定(レビュー機能設定の為)
     public function ratingSortable($query, $direction) {
         return $query->withAvg('reviews', 'score')->orderBy('reviews_avg_score', $direction);
+    }
+
+    //リレーションシップ設定(予約機能設定の為)
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    //並び替え(予約機能追加設定の為)
+    public function popularSortable()
+    {
+        return $this->withCount('reservations')->orderBy('reservations_count', 'desc');
     }
 }

@@ -57,4 +57,10 @@ class Member extends Authenticatable implements MustVerifyEmail                 
     {
         return $this->hasMany(Review::class);
     }
+
+      //リレーション設定(予約機能設定の為)
+      public function reservations()
+      {
+          return $this->hasMany(Reservation::class);
+      }
 }
