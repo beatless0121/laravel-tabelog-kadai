@@ -55,4 +55,10 @@ class Shop extends Model
     {
         return $this->withCount('reservations')->orderBy('reservations_count', 'desc');
     }
+
+     //リレーションシップ設定(お気に入り機能設定の為)
+    public function members()
+    {
+        return $this->belongsToMany(Member::class, 'shop_member')->withTimestamps();
+    }
 }

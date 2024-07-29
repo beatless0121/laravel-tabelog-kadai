@@ -11,6 +11,7 @@ use App\Http\Middleware\Subscribed;
 use App\Http\Middleware\NotSubscribed;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\FavoriteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,10 @@ Route::group(['middleware' => 'guest:admin'], function () {
        Route::get('shops/{shop}/reservations/create', [ReservationController::class, 'create'])->name('shops.reservations.create');
        Route::post('shops/{shop}/reservations', [ReservationController::class, 'store'])->name('shops.reservations.store');
        Route::delete('reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+       //お気に入り機能作成の為
+       Route::get('favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+       Route::post('favorites/{shop_id}', [FavoriteController::class, 'store'])->name('favorites.store');
+       Route::delete('favorites/{shop_id}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
     });
   }); 
 });  

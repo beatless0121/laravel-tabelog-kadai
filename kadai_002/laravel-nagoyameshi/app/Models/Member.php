@@ -8,12 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Auth\MustVerifyEmail;                                    //メール認証機能追加（要件定義書必須項目）
-use Laravel\Cashier\Billable;
+use Laravel\Cashier\Billable;                                                     //決済機能追加の為
 
 
 class Member extends Authenticatable implements MustVerifyEmail                  //メール認証機能追加（要件定義書必須項目）
 {
-    use Billable, HasApiTokens, HasFactory, Notifiable;
+    use Billable, HasApiTokens, HasFactory, Notifiable;                          //決済機能追加の為、修正
 
     /**
      * The attributes that are mass assignable.
@@ -62,5 +62,11 @@ class Member extends Authenticatable implements MustVerifyEmail                 
       public function reservations()
       {
           return $this->hasMany(Reservation::class);
+      }
+
+       //リレーション設定(お気に入り機能設定の為)
+      public function favorite_restaurants()
+      {
+          return $this->belongsToMany(Shop::class, 'shop_member')->orderBy('shop_member.created_at', 'desc');
       }
 }
