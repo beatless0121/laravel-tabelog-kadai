@@ -12,6 +12,9 @@ use App\Http\Middleware\NotSubscribed;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\CompanyController as MemberCompanyController;
+use App\Http\Controllers\TermController as MemberTermController; 
+
 
 /*
 |--------------------------------------------------------------------------
@@ -72,7 +75,12 @@ Route::group(['middleware' => 'guest:admin'], function () {
        Route::delete('favorites/{shop_id}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
     });
   }); 
-});  
+}); 
+
+Route::middleware(['guest:admin'])->group(function () {                                                      //管理者としてログインしていない状態でのみアクセスを許可
+    Route::get('/company', [MemberCompanyController::class, 'index'])->name('company.index');
+    Route::get('/terms', [MemberTermController::class, 'index'])->name('terms.index');
+});
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {          //管理者認証機能（管理者側）追加の為
     Route::get('home', [Administrator\HomeController::class, 'index'])->name('home');
