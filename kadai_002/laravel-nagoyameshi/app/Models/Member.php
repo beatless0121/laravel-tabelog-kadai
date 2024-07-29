@@ -65,7 +65,7 @@ class Member extends Authenticatable implements MustVerifyEmail                 
       }
 
        //リレーション設定(お気に入り機能設定の為)
-      public function favorite_restaurants()
+      public function favorite_shops()
       {
           return $this->belongsToMany(Shop::class, 'shop_member')->orderBy('shop_member.created_at', 'desc');
       }
