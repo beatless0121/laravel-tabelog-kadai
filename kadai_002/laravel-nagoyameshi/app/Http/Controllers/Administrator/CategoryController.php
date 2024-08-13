@@ -54,3 +54,4 @@ class CategoryController extends Controller
         return redirect()->route('admin.categories.index')->with('flash_message', 'カテゴリを削除しました。');
     }
 }
+

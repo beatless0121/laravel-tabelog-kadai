@@ -14,7 +14,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\CompanyController as MemberCompanyController;
 use App\Http\Controllers\TermController as MemberTermController; 
-
+use App\Http\Controllers\ReviewControlController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,5 +90,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
     Route::resource('categories', Administrator\CategoryController::class)->only(['index', 'store', 'update', 'destroy']);    //カテゴリ管理機能（管理者側）追加の為
     Route::resource('company', Administrator\CompanyController::class)->only(['index', 'edit', 'update']);                    //管理者側の基本情報設定機能追加の為
     Route::resource('terms',  Administrator\TermController::class)->only(['index', 'edit', 'update']);                        //管理者側の基本情報設定機能追加の為
+    Route::resource('reviewControl', Administrator\ReviewControlController::class);                                           //レビュー管理機能追加の為
  });
 
+?>
