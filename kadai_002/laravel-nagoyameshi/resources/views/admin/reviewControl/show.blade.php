@@ -13,13 +13,19 @@
                     <h1 class="mb-4 text-center">{{ $reviewControls->member_name }}</h1>
 
                 <div class="d-flex justify-content-end align-items-end mb-3">
-                    <div>
-                       <button id="release0" type="submit" class="btn text-white shadow-sm nagoyameshi-btn">公開</button>
-                       <form action="{{ route('reviewControl.update',$reviewControls) }}" method="patch" name="unrelease_flgForm">
+                    <div style="display:flex;">
+                       <form action="{{ route('admin.reviewControl.update',$reviewControls->id) }}" method="post" name="unrelease_flgForm">
                              @csrf
                              @method('patch')
+                             <input type="hidden" id="release_flg" name="release_flg" value="0" />
+                             <button id="release0" type="submit" class="btn text-white shadow-sm nagoyameshi-btn">公開</button>
+                        </form>
+                       <form action="{{ route('admin.reviewControl.update',$reviewControls->id) }}" method="post" name="unrelease_flgForm">
+                             @csrf
+                             @method('patch')
+                             <input type="hidden" id="release_flg" name="release_flg" value="1" />
                             <button type="submit" class="btn text-white shadow-sm nagoyameshi-btn-danger">非公開</button>
-                         </form>
+                        </form>
                   </div>
                 </div>
                 

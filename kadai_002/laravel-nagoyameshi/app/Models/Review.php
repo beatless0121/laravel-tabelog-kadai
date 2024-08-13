@@ -14,6 +14,7 @@ class Review extends Model
         'score',
         'shop_id',
         'member_id',
+        'release_flg',
     ];
 
     public function shop()                                                //リレーションシップ設定（レビュー機能追加の為）

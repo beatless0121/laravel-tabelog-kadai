@@ -15,10 +15,10 @@ class ReviewController extends Controller
      {
          if (auth()->user()->subscribed('premium_plan')) {
              // 有料プランに登録済みの場合
-             $reviews = $shop->reviews()->orderBy('created_at', 'desc')->paginate(5);
+             $reviews = $shop->reviews()->where('release_flg', 0)->orderBy('created_at', 'desc')->paginate(5);
          } else {
              // 有料プランに未登録の場合
-             $reviews = $shop->reviews()->orderBy('created_at', 'desc')->take(3)->get();
+             $reviews = $shop->reviews()->where('release_flg', 0)->orderBy('created_at', 'desc')->take(3)->get();
              $reviews = collect($reviews); // コレクションに変換
          }
      

@@ -59,14 +59,13 @@ class ReviewControlController extends Controller
     //updateアクション(レビュー公開、非公開機能)
     public function update(Request $request, $id)
     {
-        $request->input('hidden名')
-         //reviewsテーブルの取得
-         $reviewRelease_flg= Review::find($id);
-         //releaseカラムへ公開、非公開を挿入
-         if ($reviewRelease_flg === 1) {
-            DB::table('reviews')->update(['release_flg' => 1]);
-       } else {
-            DB::table('reviews')->update(['release_flg' => 0]);
+        //idの取得
+        $reviewRelease_flg = Review::find($id);
+        //公開、非公開の判別($request->input(nputタグのid名)で画面よりボタン入力データ取得)
+        if ($request->input('release_flg') === "1") {
+            $reviewRelease_flg->update(['release_flg' => 1]);
+        } else {
+            $reviewRelease_flg->update(['release_flg' => 0]);
         }
 
          return redirect()->route('admin.reviewControl.index');
