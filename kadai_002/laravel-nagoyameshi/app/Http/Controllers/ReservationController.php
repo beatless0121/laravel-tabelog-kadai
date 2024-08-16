@@ -31,19 +31,19 @@ class ReservationController extends Controller
    {
        // バリデーション
        $request->validate([
-           'reservation_date' => 'required|date_format:Y-m-d',
-           'reservation_time' => 'required|date_format:H:i',
-           'number_of_people' => 'required|integer|min:1|max:50',
-       ]);
+        'reservation_date' => 'required|date_format:Y-m-d',
+        'reservation_time' => 'required|date_format:H:i',
+        'number_of_people' => 'required|integer|min:1|max:50',
+    ]);
 
-       $reserved_datetime = $request->reservation_date . ' ' . $request->reservation_time;
+    $reserved_datetime = $request->reservation_date . ' ' . $request->reservation_time;
 
-       Reservation::create([
-           'reserved_datetime' => $reserved_datetime,
-           'number_of_people' => $request->number_of_people,
-           'shop_id' => $shop->id,
-           'member_id' => Auth::id(),
-       ]);
+    Reservation::create([
+        'reserved_datetime' => $reserved_datetime,
+        'number_of_people' => $request->number_of_people,
+        'shop_id' => $shop->id,
+        'member_id' => Auth::id(),
+    ]);
 
        // フラッシュメッセージ
        return redirect()->route('reservations.index')->with('flash_message', '予約が完了しました。');

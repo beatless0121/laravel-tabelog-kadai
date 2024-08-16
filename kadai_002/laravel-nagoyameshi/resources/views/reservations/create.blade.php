@@ -69,7 +69,7 @@
                         <label for="reservation_date" class="col-md-5 col-form-label text-md-left fw-bold">予約日</label>
 
                         <div class="col-md-7">
-                            <input type="text" class="form-control" id="reservation_date" name="reservation_date" value="{{ old('reservation_date') }}">
+                        <input type="text" class="form-control" id="reservation_date" name="reservation_date" value="{{ old('reservation_date') }}">
                         </div>
                     </div>
 
